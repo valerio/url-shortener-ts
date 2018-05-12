@@ -1,8 +1,8 @@
 import app from './app'
-import { connect, db } from './models/index'
+import { connect } from './models'
 
 const startServer = async () => {
-  await connect(db)
+  await connect()
 
   app.listen(app.get('port'), () => {
     console.log(`Server is running on port ${app.get('port')} in ${app.get('env')} mode`)
