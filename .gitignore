@@ -1,0 +1,8 @@
+.vscode
+.idea
+coverage
+node_modules
+dist
+
+# to avoid accidental production config commits
+config/production*

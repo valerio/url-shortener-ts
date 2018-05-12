@@ -1,0 +1,9 @@
+sql:
+  host: localhost
+  user: root
+  pass: root
+  database: root
+
+hashids:
+  salt: salt
+  minLength: 3
