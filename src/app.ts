@@ -21,4 +21,8 @@ app.use((error: any, _req: Request, res: Response, next: NextFunction) => {
   res.status(500).send()
 })
 
+app.use((_req: Request, res: Response, _next: NextFunction) => {
+  res.status(404).send()
+})
+
 export default app
