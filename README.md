@@ -34,6 +34,14 @@ You can also run a fully working local stack with **docker compose** with just:
 docker-compose up
 ```
 
+Or run only the database via docker-compose:
+
+```
+docker-compose up -d pg
+```
+
+And stop it via `docker-compose stop`.
+
 ## API
 
 The shortener offers two endpoints:
