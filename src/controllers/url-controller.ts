@@ -1,59 +1,54 @@
 import { Response, Request, NextFunction } from 'express'
 import Hashids from 'hashids'
+import config from 'config'
 import Joi from 'joi'
 
 import { UrlRepository } from '../repositories'
+import SqlUrlRepository from '../repositories/url-repository'
 
-export class UrlController {
-  private repository: UrlRepository
-  private hashGenerator: Hashids
+const urlRepository: UrlRepository = new SqlUrlRepository()
+const hashGenerator: Hashids = new Hashids(config.get('hashids.salt'), config.get('hashids.minLength'))
 
-  private urlValidationSchema = {
-    url: Joi.string().uri({ scheme: ['https', 'http'] }).trim().required()
-  }
+const urlValidationSchema = {
+  url: Joi.string().uri({ scheme: ['https', 'http'] }).trim().required()
+}
 
-  constructor (repository: UrlRepository, hashGenerator: Hashids) {
-    this.repository = repository
-    this.hashGenerator = hashGenerator
-  }
+export async function redirectToUrl (req: Request, res: Response, next: NextFunction) {
+  try {
+    const shortUrl = req.params.hash
 
-  public redirectToUrl = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const shortUrl = req.params.hash
-
-      let fullUrl = await this.repository.getUrlByShortUrl(shortUrl)
-      if (!fullUrl) {
-        return res.status(404).send()
-      }
-
-      res.redirect(301, fullUrl)
-    } catch (err) {
-      next(err)
+    let fullUrl = await urlRepository.getUrlByShortUrl(shortUrl)
+    if (!fullUrl) {
+      return res.status(404).send()
     }
+
+    res.redirect(301, fullUrl)
+  } catch (err) {
+    next(err)
   }
+}
 
-  public postUrl = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { error, value } = Joi.validate(
-        { url: req.body.url },
-        this.urlValidationSchema
-      )
+export async function postUrl (req: Request, res: Response, next: NextFunction) {
+  try {
+    const { error, value } = Joi.validate(
+      { url: req.body.url },
+      urlValidationSchema
+    )
 
-      if (error) {
-        return res.status(400).send('InvalidUrl')
-      }
-
-      const url = value.url
-
-      const lastAvailableCount = await this.repository.getLastAvailableCount()
-
-      const hash = this.hashGenerator.encode(lastAvailableCount)
-
-      await this.repository.createShortUrl(url, hash)
-
-      res.status(201).send(hash)
-    } catch (err) {
-      next(err)
+    if (error) {
+      return res.status(400).send('InvalidUrl')
     }
+
+    const url = value.url
+
+    const lastAvailableCount = await urlRepository.getLastAvailableCount()
+
+    const hash = hashGenerator.encode(lastAvailableCount)
+
+    await urlRepository.createShortUrl(url, hash)
+
+    res.status(201).send(hash)
+  } catch (err) {
+    next(err)
   }
 }
