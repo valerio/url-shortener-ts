@@ -1,4 +1,4 @@
-import express, { Response, NextFunction } from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
 
 import initRoutes from './routes/index'
@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 initRoutes(app)
 
-app.use((error: any, res: Response, next: NextFunction) => {
+app.use((error: any, _req: Request, res: Response, next: NextFunction) => {
   if (!error) {
     return next()
   }
