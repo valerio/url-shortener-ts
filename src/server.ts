@@ -1,5 +1,5 @@
 import app from './app'
-import { connect } from './models'
+import { connect } from './sequelize'
 
 const startServer = async () => {
   await connect()
