@@ -40,7 +40,7 @@ export class UrlController {
       )
 
       if (error) {
-        return res.status(400).send(error.name)
+        return res.status(400).send('InvalidUrl')
       }
 
       const url = value.url
