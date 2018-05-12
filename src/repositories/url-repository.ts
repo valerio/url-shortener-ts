@@ -1,5 +1,5 @@
-import { Url } from '../models/index'
-import UrlRepository from './interfaces'
+import { Url } from '../models'
+import { UrlRepository } from '../repositories'
 
 export default class SqlUrlRepository implements UrlRepository {
   private _url = Url

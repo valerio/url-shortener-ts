@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express'
 import Hashids from 'hashids'
 import Joi from 'joi'
 
-import UrlRepository from '../repositories/interfaces'
+import { UrlRepository } from '../repositories'
 
 export class UrlController {
   private repository: UrlRepository
