@@ -19,7 +19,7 @@ const sequelize = new Sequelize(
   }
 )
 
-export async function init (db: Sequelize.Sequelize) {
+export async function connect (db: Sequelize.Sequelize): Promise<void> {
   try {
     await db.authenticate()
     await db.sync()
@@ -27,9 +27,11 @@ export async function init (db: Sequelize.Sequelize) {
     console.log('Connection to SQL DB has been established successfully.')
   } catch (err) {
     console.error('Unable to connect to the database:', err)
-    process.exit()
+    process.exit(1)
   }
 }
 
 export const db = sequelize
+
+// Export models
 export const Url = UrlModel(sequelize)
