@@ -3,8 +3,4 @@ sql:
   user: root
   pass: root
   database: root
-  dialect: postgres
-
-hashids:
-  salt: salt
-  minLength: 3
+  dialect: sqlite

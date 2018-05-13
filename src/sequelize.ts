@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
   config.get<string>('sql.pass'),
   {
     host: config.get<string>('sql.host'),
-    dialect: 'postgres',
+    dialect: config.get<string>('sql.dialect'),
 
     pool: {
       min: 0,
